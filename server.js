@@ -66,6 +66,26 @@ app.post('/testimonials', (req, res) => {
     res.status(201).json(newTestimonial);
 });
 
+app.put('/testimonials/:id', (req, res) => {
+    const id = req.params.id;
+    const { author, text } = req.body;
+
+    if (!author || !text) {
+        return res.status(400).json({ error: 'Missing author or text in the request body' });
+    }
+
+    const testimonialIndex = db.findIndex(item => item.id === id);
+
+    if (testimonialIndex !== -1) {
+        // Modyfikacja atrybutów author i text
+        db[testimonialIndex].author = author;
+        db[testimonialIndex].text = text;
+
+        res.json(db[testimonialIndex]);
+    } else {
+        res.status(404).json({ error: 'Not found' });
+    }
+});
 
 app.get('/', (req, res) => {
     res.send('express server');
