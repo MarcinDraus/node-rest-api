@@ -7,20 +7,13 @@ const db = require('./db');
 //const router = express.Router();
 const testimonialsRoutes = require('./routes/testimonials.routes');
 const testimonialsConcerts = require('./routes/concerts.routes');
+const testimonialsSeats = require('./routes/seats.routes')
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/api', testimonialsRoutes);
 app.use('/api', testimonialsConcerts);
+app.use('/api', testimonialsSeats);
 
-app.get('/', (req, res) => {
-    res.send('express server');
-});
-
-
-
-app.get('/seats', (req, res) => {
-    res.json(db.seats);
-});
 
 app.listen(port, () => {
    console.log(`Server is running on port ${port}`)

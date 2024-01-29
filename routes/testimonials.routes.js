@@ -94,7 +94,7 @@ router.get('/testimonials/random', (req, res) => {
     if (randomTestimonial) {
         res.json(randomTestimonial);
     } else {
-        res.status(404).json({ error: 'Not found' });
+        res.status(404).json({ error: 'Not found testimonial' });
     }
 });
 
