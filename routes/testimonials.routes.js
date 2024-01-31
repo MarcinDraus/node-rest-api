@@ -9,29 +9,29 @@ router.delete('/testimonials/:id', (req, res) => {
     const id = req.params.id;
 
     // Sprawdź, czy identyfikator jest prawidłowym identyfikatorem UUID.
-    if (!isValidUUID(id)) {
-        res.status(400).json({ error: 'Invalid UUID format' });
-        return;
-    }
+    // if (!isValidUUID(id)) {
+    //     res.status(400).json({ error: 'Invalid UUID format' });
+    //     return;
+    // }
 
     // Szukaj indeksu elementu w tablicy db o identyfikatorze równym id.
-    const index = db.testimonials.findIndex(item => item.id === id);
+    const index = db.testimonials.findIndex(item => item.id === id || item.id.toString() === id);
 
     // Sprawdź, czy element został znaleziony.
     if (index !== -1) {
         // Usuń element z tablicy db na podstawie indeksu.
-        db.testimonials.splice(index, 1);
-        res.json({ message: 'OK' });
+        deletedTestimonial = db.testimonials.splice(index, 1)[0];
+        res.status(200).json({ message: 'Testimonial deleted successfully', deletedTestimonial });
     } else {
         res.status(404).json({ error: 'Not found' });
     }
 });
 
 // Funkcja sprawdzająca, czy ciąg znaków jest prawidłowym identyfikatorem UUID.
-function isValidUUID(uuid) {
-    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    return uuidRegex.test(uuid);
-}
+// function isValidUUID(uuid) {
+//     const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+//     return uuidRegex.test(uuid);
+// }
 
 router.post('/testimonials', (req, res) => {
     // Pobranie danych z ciała żądania
@@ -67,7 +67,7 @@ router.put('/testimonials/:id', (req, res) => {
         return res.status(400).json({ error: 'Missing author or text in the request body' });
     }
 
-    const testimonialIndex = db.testimonials.findIndex(item => item.id === id);
+    const testimonialIndex = db.testimonials.findIndex(item => item.id === id || item.id.toString() === id );
 
     if (testimonialIndex !== -1) {
         // Modyfikacja atrybutów author i text

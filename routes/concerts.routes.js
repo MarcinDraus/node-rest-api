@@ -111,21 +111,21 @@ router.delete('/concerts/:id', (req, res) => {
     res.json({ message: 'Concert deleted successfully', deletedConcert });
 });
 
-router.delete('/concerts/:id', (req, res) => {
-    const id = req.params.id;
+// router.delete('/concerts/:id', (req, res) => {
+//     const id = req.params.id;
 
-    // Sprawdź, czy identyfikator istnieje w tablicy koncertów
-    const concertIndex = db.concerts.findIndex(concert => concert.id === id);
+//     // Sprawdź, czy identyfikator istnieje w tablicy koncertów
+//     const concertIndex = db.concerts.findIndex(concert => concert.id === id);
 
-    if (concertIndex === -1) {
-        return res.status(404).json({ error: 'Concert not found' });
-    }
+//     if (concertIndex === -1) {
+//         return res.status(404).json({ error: 'Concert not found' });
+//     }
 
-    // Usuń koncert z tablicy
-    const deletedConcert = db.concerts.splice(concertIndex, 1)[0];
+//     // Usuń koncert z tablicy
+//     const deletedConcert = db.concerts.splice(concertIndex, 1)[0];
 
-    res.json({ message: 'Concert deleted successfully', deletedConcert });
-});
+//     res.json({ message: 'Concert deleted successfully', deletedConcert });
+// });
 
 
 module.exports = router
