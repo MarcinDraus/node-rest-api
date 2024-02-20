@@ -44,24 +44,46 @@ export const loadSeatsRequest = () => {
 
   };
 };
-
 export const addSeatRequest = (seat) => {
   return async dispatch => {
-
     dispatch(startRequest({ name: 'ADD_SEAT' }));
     try {
-
-      let res = await axios.post(`${API_URL}/seats`, seat);
+      const res = await axios.post(`${API_URL}/seats`, seat);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       dispatch(addSeat(res));
       dispatch(endRequest({ name: 'ADD_SEAT' }));
-
-    } catch(e) {
-      dispatch(errorRequest({ name: 'ADD_SEAT', error: e.message }));
+      return { error: null }; // Zwracamy pusty obiekt w przypadku sukcesu
+    } catch (error) {
+      if (error.response && error.response.status === 400 && error.response.data && error.response.data.message === "The slot is already taken...") {
+        dispatch(errorRequest({ name: 'ADD_SEAT', error: "The slot is already taken..." }));
+        return { error: "The slot is already taken..." }; // Zwracamy błąd w przypadku zajętego miejsca
+      } else {
+        dispatch(errorRequest({ name: 'ADD_SEAT', error: error.message }));
+        return { error: error.message }; // Zwracamy inny błąd w przypadku innej sytuacji
+      }
     }
-
   };
 };
+
+// export const addSeatRequest = (seat) => {
+//   return async dispatch => {
+
+//     dispatch(startRequest({ name: 'ADD_SEAT' }));
+//     try {
+
+//       let res = await axios.post(`${API_URL}/seats`, seat);
+//       await new Promise((resolve) => setTimeout(resolve, 1000));
+//       dispatch(addSeat(res));
+//       dispatch(endRequest({ name: 'ADD_SEAT' }));
+
+//     } catch(e) {
+//       dispatch(errorRequest({ name: 'ADD_SEAT', error: e.message }));
+//     }
+
+//   };
+// };
+
+
 
 /* INITIAL STATE */
 

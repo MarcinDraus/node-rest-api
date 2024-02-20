@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSeatRequest, getRequests } from '../../../redux/seatsRedux';
 
+import { useEffect } from 'react';
+import { loadSeatsRequest } from '../../../redux/seatsRedux';
+
 import './OrderTicketForm.scss';
 import SeatChooser from './../SeatChooser/SeatChooser';
 
@@ -36,20 +39,59 @@ const OrderTicketForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-
-    if(order.client && order.email && order.day && order.seat) {
-      dispatch(addSeatRequest(order));
-      setOrder({
-        client: '',
-        email: '',
-        day: 1,
-        seat: '',
-      });
-      setIsError(false);
+  
+    if (order.client && order.email && order.day && order.seat) {
+      const addSeatResponse = await dispatch(addSeatRequest(order));
+  
+      if (!addSeatResponse.error) {
+        setOrder({
+          client: '',
+          email: '',
+          day: 1,
+          seat: '',
+        });
+        setIsError(false);
+        dispatch(loadSeatsRequest()); 
+      } else {
+        setIsError(true);
+        // Tutaj możemy obsłużyć przypadek, gdy miejsce jest już zajęte
+      }
     } else {
       setIsError(true);
     }
   }
+  
+  // const submitForm = async (e) => {
+  //   e.preventDefault();
+
+  //   if (order.client && order.email && order.day && order.seat) {
+  //     const addSeatResponse = await dispatch(addSeatRequest(order)); 
+      
+
+  //     if (!addSeatResponse.error) {
+  //       setOrder({
+  //         client: '',
+  //         email: '',
+  //         day: 1,
+  //         seat: '',
+  //       });
+  //       setIsError(false);
+  //       dispatch(loadSeatsRequest()); 
+  //     } else {
+  //       setIsError(true);
+  //     }
+  //   } else {
+  //     setIsError(true);
+  //   }
+ 
+  // }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(loadSeatsRequest());
+    }, 120000); // 120000 milisekund = 2 minuty
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   return (
     <Form className="order-ticket-form" onSubmit={submitForm}>
