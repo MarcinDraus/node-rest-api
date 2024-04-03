@@ -1,18 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+
 const app = express();
 
 app.use(cors());
-
-// const corsOptions = {
-//    origin: 'http://localhost:3000', // Adres front-endu
-//    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//    credentials: true, // Włącz obsługę ciasteczek (jeśli korzystasz z sesji)
-//    optionsSuccessStatus: 204,
-//  };
- 
-//  app.use(cors(corsOptions));
- 
 
 const port = process.env.PORT || 8000;
 const { v4: uuidv4 } = require('uuid');
@@ -28,6 +20,13 @@ app.use('/api', testimonialsRoutes);
 app.use('/api', testimonialsConcerts);
 app.use('/api', testimonialsSeats);
 
+// Obsługa plików statycznych z folderu client/build
+app.use(express.static(path.join(__dirname, 'client', 'build')));
+
+// Obsługa wszystkich innych żądań, przekierowuje na index.html z Reacta
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.listen(port, () => {
    console.log(`Server is running on port ${port}`)

@@ -34,7 +34,7 @@ export const loadSeatsRequest = () => {
     try {
 
       let res = await axios.get(`${API_URL}/seats`);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       dispatch(loadSeats(res.data));
       dispatch(endRequest({ name: 'LOAD_SEATS' }));
 
@@ -49,7 +49,7 @@ export const addSeatRequest = (seat) => {
     dispatch(startRequest({ name: 'ADD_SEAT' }));
     try {
       const res = await axios.post(`${API_URL}/seats`, seat);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       dispatch(addSeat(res));
       dispatch(endRequest({ name: 'ADD_SEAT' }));
       return { error: null }; // Zwracamy pusty obiekt w przypadku sukcesu
@@ -64,24 +64,6 @@ export const addSeatRequest = (seat) => {
     }
   };
 };
-
-// export const addSeatRequest = (seat) => {
-//   return async dispatch => {
-
-//     dispatch(startRequest({ name: 'ADD_SEAT' }));
-//     try {
-
-//       let res = await axios.post(`${API_URL}/seats`, seat);
-//       await new Promise((resolve) => setTimeout(resolve, 1000));
-//       dispatch(addSeat(res));
-//       dispatch(endRequest({ name: 'ADD_SEAT' }));
-
-//     } catch(e) {
-//       dispatch(errorRequest({ name: 'ADD_SEAT', error: e.message }));
-//     }
-
-//   };
-// };
 
 
 
